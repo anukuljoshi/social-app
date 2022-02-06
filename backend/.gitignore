@@ -8,9 +8,6 @@ staticfiles/
 # .sh files
 *.sh
 
-# production settings
-prod.py
-
 ### Django ###
 *.log
 *.pot

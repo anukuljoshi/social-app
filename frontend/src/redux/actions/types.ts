@@ -1,3 +1,8 @@
 export enum ActionTypes {
 	CHANGE_THEME = "CHANGE_THEME",
+
+    // auth user
+    AUTH_USER_LOADING = "AUTH_USER_LOADING",
+    AUTH_USER_ERROR = "AUTH_USER_ERROR",
+    AUTH_USER_SUCCESS = "AUTH_USER_SUCCESS",
 }

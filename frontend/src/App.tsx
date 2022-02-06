@@ -5,6 +5,7 @@ import { createTheme, CssBaseline, ThemeProvider } from "@mui/material";
 import Layout from "./components/layout/Layout";
 
 import { IStoreState } from "./redux/store";
+import MainRoutes from "./routes";
 
 const lightTheme = createTheme({
 	palette: {
@@ -61,7 +62,7 @@ const App = () => {
 		<ThemeProvider theme={mode === "light" ? lightTheme : darkTheme}>
 			<CssBaseline />
 			<Layout>
-				<h1>Hello World</h1>
+                <MainRoutes />
 			</Layout>
 		</ThemeProvider>
 	);

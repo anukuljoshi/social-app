@@ -1,6 +1,6 @@
 from decouple import config
 
-if(config("MODE", default="", cast=str)=="dev"):
+if(config("MODE", default="dev", cast=str)=="dev"):
     from .dev import *
 else:
     from .prod import *
