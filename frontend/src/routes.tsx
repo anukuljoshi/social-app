@@ -2,6 +2,7 @@ import { Route, Routes } from "react-router-dom";
 import { URLRoutes } from "./constants/routes";
 
 import PrivateRoute from "./components/auth/PrivateRoute";
+import UnauthRoute from "./components/auth/UnauthRoute";
 
 import HomePage from "./pages";
 import LogIn from "./pages/auth/login";
@@ -18,8 +19,12 @@ const MainRoutes = () => {
 			</Route>
 
 			{/* auth */}
-			<Route path={`${URLRoutes.SIGNUP}`} element={<SignUp />} />
-			<Route path={`${URLRoutes.LOGIN}`} element={<LogIn />} />
+			<Route path={`${URLRoutes.SIGNUP}`} element={<UnauthRoute />}>
+				<Route path={""} element={<SignUp />} />
+			</Route>
+			<Route path={`${URLRoutes.LOGIN}`} element={<UnauthRoute />}>
+				<Route path={""} element={<LogIn />} />
+			</Route>
 
 			{/* post */}
 			<Route path={`${URLRoutes.POSTS}`} element={<PrivateRoute />}>
