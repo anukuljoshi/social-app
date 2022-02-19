@@ -30,6 +30,6 @@ class UserProfile(models.Model):
 
 
 @receiver(post_save, sender=CustomUser)
-def save_user_profile(instance, created, *args, **kwargs):
+def save_user_profile(sender, instance=None, created=False, *args, **kwargs):
     if created:
         UserProfile.objects.create(user=instance)

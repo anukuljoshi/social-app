@@ -62,7 +62,8 @@ const App = () => {
 		<ThemeProvider theme={mode === "light" ? lightTheme : darkTheme}>
 			<CssBaseline />
 			<Layout>
-                <MainRoutes />
+                <br />
+				<MainRoutes />
 			</Layout>
 		</ThemeProvider>
 	);

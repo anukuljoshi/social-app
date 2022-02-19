@@ -1,14 +1,15 @@
-import axios from 'axios';
+import { Dispatch } from "redux";
 
-import { ActionTypes } from './types';
+import { ActionTypes } from "./types";
 
-import { Dispatch } from 'redux';
-import { BASE_API_URL } from '../../constants/api';
+export const loginUserAction = (data: any) => {
+	return (dispatch: Dispatch) => {
+		dispatch({ type: ActionTypes.LOGIN_SUCCESS, payload: data });
+	};
+};
 
-export const getAuthUserAction = () => {
-    return (dispatch: Dispatch) => {
-        dispatch({type: ActionTypes.AUTH_USER_LOADING});
-
-        // axios.get(`${BASE_API_URL}/api/`)
-    }
-}
+export const logoutUserAction = () => {
+	return (dispatch: Dispatch) => {
+		dispatch({ type: ActionTypes.LOGOUT_SUCCESS });
+	};
+};
