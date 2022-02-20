@@ -1,12 +1,11 @@
+import axios from "axios";
+import * as Yup from "yup";
 import { useState } from "react";
 import { useDispatch } from "react-redux";
 import { useNavigate } from "react-router-dom";
-import axios from "axios";
 import { useFormik } from "formik";
-import * as Yup from "yup";
 
-import { Button, FormControl, TextField, Typography } from "@mui/material";
-import { Box } from "@mui/system";
+import { Box, Button, FormControl, TextField, Typography } from "@mui/material";
 
 import { loginUserAction } from "../../redux/actions/auth";
 
@@ -44,8 +43,8 @@ const LoginForm = () => {
 				})
 				.catch((error) => {
 					setSubmitting(true);
+					console.log("log in error", error);
 					if (error.response.status === 400) {
-						console.log(error.response.data);
 						setErrors(error.response.data);
 					}
 				});

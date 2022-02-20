@@ -16,13 +16,14 @@ class CustomUser(AbstractUser):
 
 
 def file_upload_location(instance, filename):
-    print(instance)
-    return f"/profile/"
+    return f"images/{instance.user.username}/profile/" + filename
 
 
 # Create your models here.
 class UserProfile(models.Model):
-    user = models.OneToOneField(CustomUser, on_delete=models.CASCADE)
+    user = models.OneToOneField(
+        CustomUser, on_delete=models.CASCADE, related_name="profile"
+    )
     image = models.ImageField(upload_to=file_upload_location, null=True, blank=True)
 
     def __str__(self):

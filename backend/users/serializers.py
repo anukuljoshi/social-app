@@ -8,7 +8,13 @@ from .models import UserProfile
 User = get_user_model()
 
 
-class UserSerializer(serializers.ModelSerializer):
+class UserProfileSerializer(serializers.ModelSerializer):
+    class Meta:
+        model = UserProfile
+        fields = ["image"]
+
+
+class UserCreateSerializer(serializers.ModelSerializer):
     password = serializers.CharField(write_only=True)
 
     class Meta:
@@ -16,15 +22,15 @@ class UserSerializer(serializers.ModelSerializer):
         fields = ["id", "username", "email", "password"]
 
     def create(self, validated_data):
-        user = super(UserSerializer, self).create(validated_data)
+        user = super(UserCreateSerializer, self).create(validated_data)
         user.set_password(validated_data["password"])
         user.save()
         return user
 
 
-class UserProfileSerializer(serializers.ModelSerializer):
-    user = UserSerializer()
+class UserSerializer(serializers.ModelSerializer):
+    profile = UserProfileSerializer()
 
     class Meta:
-        model = UserProfile
-        fields = ["user", "image"]
+        model = User
+        fields = ["id", "username", "email", "profile"]

@@ -2,10 +2,10 @@ import { useSelector } from "react-redux";
 
 import { createTheme, CssBaseline, ThemeProvider } from "@mui/material";
 
+import MainRoutes from "./routes";
 import Layout from "./components/layout/Layout";
 
 import { IStoreState } from "./redux/store";
-import MainRoutes from "./routes";
 
 const lightTheme = createTheme({
 	palette: {
@@ -46,7 +46,7 @@ const darkTheme = createTheme({
 		text: {
 			primary: "#d4d4d4",
 			secondary: "#8e8e8e",
-			disabled: "rgba(100,100,100,0.38)",
+			disabled: "rgba(183,183,183,0.38)",
 		},
 		divider: "rgba(201,201,201,0.12)",
 	},
@@ -62,7 +62,7 @@ const App = () => {
 		<ThemeProvider theme={mode === "light" ? lightTheme : darkTheme}>
 			<CssBaseline />
 			<Layout>
-                <br />
+				<br />
 				<MainRoutes />
 			</Layout>
 		</ThemeProvider>

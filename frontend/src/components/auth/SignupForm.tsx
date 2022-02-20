@@ -1,11 +1,10 @@
+import axios from "axios";
+import * as Yup from "yup";
 import { useState } from "react";
 import { useNavigate } from "react-router-dom";
 import { useFormik } from "formik";
-import * as Yup from "yup";
-import axios from "axios";
 
-import { Button, FormControl, TextField, Typography } from "@mui/material";
-import { Box } from "@mui/system";
+import { Box, Button, FormControl, TextField, Typography } from "@mui/material";
 
 import { URLRoutes } from "../../constants/routes";
 import { BASE_API_URL } from "../../constants/api";
@@ -51,8 +50,8 @@ const SignupForm = () => {
 				})
 				.catch((error) => {
 					setSubmitting(true);
+					console.log("sign up error", error);
 					if (error.response.status === 400) {
-						console.log(error.response.data);
 						setErrors(error.response.data);
 					}
 				});

@@ -5,7 +5,7 @@ import { useDispatch, useSelector } from "react-redux";
 
 import { BASE_API_URL } from "../constants/api";
 
-import { loginUserAction } from "../redux/actions/auth";
+import { loginUserAction, logoutUserAction } from "../redux/actions/auth";
 import { IStoreState } from "../redux/store";
 
 const useAxios = () => {
@@ -37,10 +37,11 @@ const useAxios = () => {
 
 		if (res.status === 200) {
 			dispatch(loginUserAction(res.data));
+			req.headers!.Authorization = `Bearer ${res.data.access}`;
+			return req;
+		} else {
+			dispatch(logoutUserAction());
 		}
-
-		req.headers!.Authorization = `Bearer ${res.data.access}`;
-		return req;
 	});
 
 	return axiosInstance;
