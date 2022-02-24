@@ -3,7 +3,7 @@ from django.contrib.auth import get_user_model
 
 from rest_framework import serializers
 
-from .models import UserProfile
+from .models import UserProfile, UserFollowing
 
 User = get_user_model()
 
@@ -28,9 +28,22 @@ class UserCreateSerializer(serializers.ModelSerializer):
         return user
 
 
+class UserFollowingSerializer(serializers.ModelSerializer):
+    class Meta:
+        model = UserFollowing
+        fields = [
+            "id",
+            "follower",
+            "following",
+            "created_at",
+        ]
+
+
 class UserSerializer(serializers.ModelSerializer):
     profile = UserProfileSerializer()
+    followers = UserFollowingSerializer(many=True)
+    following = UserFollowingSerializer(many=True)
 
     class Meta:
         model = User
-        fields = ["id", "username", "email", "profile"]
+        fields = ["id", "username", "email", "profile", "followers", "following"]

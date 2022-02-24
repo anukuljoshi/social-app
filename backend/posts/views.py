@@ -1,4 +1,4 @@
-from django.shortcuts import render
+from django.contrib.auth import get_user_model
 
 from rest_framework import status
 from rest_framework.decorators import api_view, permission_classes
@@ -8,17 +8,24 @@ from rest_framework.permissions import IsAuthenticated
 from .models import Post, Upvote
 from .serializers import PostSerializer, PostCreateSerializer
 
+User = get_user_model()
+
 
 @api_view(["GET"])
 @permission_classes([IsAuthenticated])
-def home(request, *args, **kwargs):
-    return Response({"message": "Hello Posts"}, status=status.HTTP_200_OK)
+def get_all_posts(request, *args, **kwargs):
+    posts = Post.objects.all()
+    serialized_data = PostSerializer(posts, many=True)
+    return Response(serialized_data.data, status=status.HTTP_200_OK)
 
 
 @api_view(["GET"])
-# @permission_classes([IsAuthenticated])
-def get_all_posts(request, *args, **kwargs):
-    posts = Post.objects.all()
+@permission_classes([IsAuthenticated])
+def get_following_user_posts(request, *args, **kwargs):
+    user = request.user
+
+    following_users = user.following.all().values_list("following", flat=True)
+    posts = Post.objects.filter(user__in=following_users)
     serialized_data = PostSerializer(posts, many=True)
     return Response(serialized_data.data, status=status.HTTP_200_OK)
 
@@ -52,6 +59,5 @@ def upvote_post(request, *args, **kwargs):
         new_upvote = Upvote.objects.create(user=user, post=post)
         new_upvote.save()
 
-    post = Post.objects.filter(id=postId).first()
     serialized_data = PostSerializer(post)
     return Response(serialized_data.data, status=status.HTTP_200_OK)

@@ -1,5 +1,4 @@
 import { Route, Routes } from "react-router-dom";
-import { URLRoutes } from "./constants/routes";
 
 import PrivateRoute from "./components/auth/PrivateRoute";
 import UnauthRoute from "./components/auth/UnauthRoute";
@@ -8,7 +7,10 @@ import HomePage from "./pages";
 import LogIn from "./pages/auth/login";
 import SignUp from "./pages/auth/signup";
 import PostIndex from "./pages/posts";
-import UserIndex from "./pages/users";
+// import UserIndex from "./pages/users";
+import UserDetail from "./pages/users/detail";
+
+import { URLRoutes } from "./constants/routes";
 
 const MainRoutes = () => {
 	return (
@@ -33,7 +35,8 @@ const MainRoutes = () => {
 
 			{/* users */}
 			<Route path={`${URLRoutes.USERS}`} element={<PrivateRoute />}>
-				<Route path={""} element={<UserIndex />} />
+				{/* <Route path={""} element={<UserIndex />} /> */}
+				<Route path={":username/*"} element={<UserDetail />} />
 			</Route>
 		</Routes>
 	);

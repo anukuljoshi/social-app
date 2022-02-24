@@ -1,12 +1,19 @@
 from django.contrib.auth import get_user_model, authenticate
 
 from rest_framework import status
-from rest_framework.decorators import api_view
+from rest_framework.decorators import api_view, permission_classes
+from rest_framework.permissions import IsAuthenticated
 from rest_framework.response import Response
 
 from rest_framework_simplejwt.tokens import RefreshToken
 from rest_framework_simplejwt.serializers import TokenObtainPairSerializer
 from rest_framework_simplejwt.views import TokenObtainPairView
+
+from .models import UserFollowing
+from .serializers import UserFollowingSerializer
+
+from posts.models import Post
+from posts.serializers import PostSerializer
 
 from users.serializers import UserSerializer, UserCreateSerializer
 
@@ -109,9 +116,74 @@ def sign_up(request, *args, **kwargs):
 #     return Response(user_response, status=status.HTTP_200_OK)
 
 
+@api_view(["PATCH"])
+@permission_classes([IsAuthenticated])
+def follow_user(request, *args, **kwargs):
+    user = request.user
+    followingId = kwargs["followingId"]
+
+    following_user = User.objects.filter(id=followingId).first()
+    if not following_user:
+        return Response(
+            {"message": "not found"},
+            status=status.HTTP_404_NOT_FOUND,
+        )
+
+    follow = UserFollowing.objects.filter(
+        follower=user, following=following_user
+    ).first()
+    if follow:
+        follow.delete()
+    else:
+        new_follow = UserFollowing.objects.create(
+            follower=user, following=following_user
+        )
+        new_follow.save()
+
+    following_serializer = UserSerializer(following_user)
+    return Response(
+        following_serializer.data,
+        status=status.HTTP_200_OK,
+    )
+
+
+@api_view(["GET"])
+@permission_classes([IsAuthenticated])
+def get_user_detail(request, *args, **kwargs):
+    username = kwargs["username"]
+    user = User.objects.filter(username=username).first()
+    serialized_data = UserSerializer(user)
+
+    return Response(serialized_data.data, status=status.HTTP_200_OK)
+
+
+@api_view(["GET"])
+@permission_classes([IsAuthenticated])
+def get_user_created_posts(request, *args, **kwargs):
+    username = kwargs["username"]
+    user = User.objects.filter(username=username).first()
+    posts = Post.objects.filter(user=user)
+    serialized_data = PostSerializer(posts, many=True)
+
+    return Response(serialized_data.data, status=status.HTTP_200_OK)
+
+
+@api_view(["GET"])
+@permission_classes([IsAuthenticated])
+def get_user_liked_posts(request, *args, **kwargs):
+    username = kwargs["username"]
+    user = User.objects.filter(username=username).first()
+    print(user)
+    posts = user.upvoted_posts.all()
+    print(posts)
+    serialized_data = PostSerializer(posts, many=True)
+
+    return Response(serialized_data.data, status=status.HTTP_200_OK)
+
+
 @api_view(["GET"])
 def get_all_users(request, *args, **kwargs):
-    user_profiles = User.objects.all()
-    serialized_data = UserSerializer(user_profiles, many=True)
+    users = User.objects.all()
+    serialized_data = UserSerializer(users, many=True)
 
     return Response(serialized_data.data, status=status.HTTP_200_OK)

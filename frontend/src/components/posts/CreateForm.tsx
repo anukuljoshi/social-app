@@ -16,9 +16,8 @@ import { AddPhotoAlternate } from "@mui/icons-material";
 
 import { createPostAction } from "../../redux/actions/posts";
 
-import axiosInstance from "../../utils/axiosInstance";
-
 import { FILE_SIZE, FILE_TYPES } from "../../constants/file";
+import axiosInstance from "../../services/api";
 
 interface PostCreateFormValues {
 	content: string;
@@ -37,14 +36,20 @@ const PostCreateForm = () => {
 		validationSchema: Yup.object({
 			content: Yup.string().required("Required"),
 			image: Yup.mixed()
-				.test(
-					"fileSize",
-					"File Size is too large",
-					(value) => value?.size <= FILE_SIZE
-				)
-				.test("fileType", "Unsupported file format", (value) =>
-					FILE_TYPES.includes(value?.type)
-				),
+				.test("fileSize", "File Size is too large", (value) => {
+					if (value) {
+						return value.size <= FILE_SIZE;
+					} else {
+						return true;
+					}
+				})
+				.test("fileType", "Unsupported file format", (value) => {
+					if (value) {
+						return FILE_TYPES.includes(value?.type);
+					} else {
+						return true;
+					}
+				}),
 		}),
 		onSubmit: (values, { setSubmitting, resetForm }) => {
 			setSubmitting(false);

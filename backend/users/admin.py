@@ -3,8 +3,7 @@ from django.contrib.auth.admin import UserAdmin
 
 from .forms import CustomUserCreationForm, CustomUserChangeForm
 
-from .models import CustomUser
-from .models import UserProfile
+from .models import CustomUser, UserProfile, UserFollowing
 
 
 class CustomUserAdmin(UserAdmin):
@@ -29,8 +28,9 @@ class CustomUserAdmin(UserAdmin):
             },
         ),
     )
-    search_fields = ('username',)
+    search_fields = ("username",)
 
 
 admin.site.register(CustomUser, CustomUserAdmin)
 admin.site.register(UserProfile)
+admin.site.register(UserFollowing)

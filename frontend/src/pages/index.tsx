@@ -13,7 +13,10 @@ import PostList from "../components/posts/List";
 import PostCreateForm from "../components/posts/CreateForm";
 
 import { IStoreState } from "../redux/store";
-import { getAllPostListAction } from "../redux/actions/posts";
+import {
+	getAllPostListAction,
+	getFollowingUserPostListAction,
+} from "../redux/actions/posts";
 
 type View = "all" | "following";
 
@@ -26,24 +29,11 @@ const HomePage = () => {
 
 	useEffect(() => {
 		if (view === "following") {
-			// change to get following users posts
-			dispatch(getAllPostListAction());
+			dispatch(getFollowingUserPostListAction());
 		} else if (view === "all") {
 			dispatch(getAllPostListAction());
 		}
 	}, [dispatch, view]);
-
-	if (loading) {
-		<Container>
-			<Typography variant={"h2"}>Loading...</Typography>
-		</Container>;
-	}
-
-	if (error) {
-		<Container>
-			<Typography variant={"h2"}>Error</Typography>
-		</Container>;
-	}
 
 	return (
 		<Container>
@@ -67,7 +57,11 @@ const HomePage = () => {
 							ALL
 						</Button>
 					</ButtonGroup>
-					<PostList posts={posts} />
+					{loading && (
+						<Typography variant={"h5"}>Loading...</Typography>
+					)}
+					{error && <Typography variant={"h5"}>Error</Typography>}
+					{!loading && !error && <PostList posts={posts} />}
 				</Grid>
 				<Grid item xs={0} md={0} lg={3}></Grid>
 			</Grid>

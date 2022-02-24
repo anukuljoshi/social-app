@@ -1,4 +1,5 @@
 import dayjs from "dayjs";
+import { Link } from "react-router-dom";
 import { useDispatch, useSelector } from "react-redux";
 
 import {
@@ -15,6 +16,7 @@ import { IStoreState } from "../../redux/store";
 import { upvotePostAction } from "../../redux/actions/posts";
 
 import { BASE_API_URL } from "../../constants/api";
+import { URLRoutes } from "../../constants/routes";
 
 interface PostListItemProps {
 	post: IPost;
@@ -26,13 +28,17 @@ const PostListItem = ({ post }: PostListItemProps) => {
 
 	return (
 		<Card sx={{ py: 1, mb: 2 }}>
-			<CardHeader
-				title={post.user.username}
-				subheader={dayjs(post.created_at).format("MMM D, YYYY HH:mm A")}
-				titleTypographyProps={{ variant: "body1" }}
-				subheaderTypographyProps={{ variant: "body2" }}
-				sx={{ py: 0 }}
-			/>
+			<Link to={`/${URLRoutes.USERS}/${post.user.username}`}>
+				<CardHeader
+					title={post.user.username}
+					subheader={dayjs(post.created_at).format(
+						"MMM D, YYYY HH:mm A"
+					)}
+					titleTypographyProps={{ variant: "body1" }}
+					subheaderTypographyProps={{ variant: "body2" }}
+					sx={{ py: 0 }}
+				/>
+			</Link>
 			{post.image && (
 				<CardMedia
 					component={"img"}

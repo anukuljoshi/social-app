@@ -1,5 +1,5 @@
 import { useSelector, useDispatch } from "react-redux";
-import { Link } from "react-router-dom";
+import { Link, useNavigate } from "react-router-dom";
 
 import {
 	AppBar,
@@ -20,6 +20,7 @@ import { IStoreState } from "../../redux/store";
 import { URLRoutes } from "../../constants/routes";
 
 const Navbar = () => {
+	const navigate = useNavigate();
 	const dispatch = useDispatch();
 	const { user } = useSelector((state: IStoreState) => state.auth);
 	const { mode } = useSelector((state: IStoreState) => state.theme);
@@ -30,6 +31,7 @@ const Navbar = () => {
 
 	const handleLogout = () => {
 		dispatch(logoutUserAction());
+		navigate(`/${URLRoutes.LOGIN}`);
 	};
 
 	return (
@@ -41,7 +43,7 @@ const Navbar = () => {
 					justifyContent={"space-between"}
 					alignItems={"center"}
 				>
-					<Link to={""}>
+					<Link to={"/"}>
 						<Typography
 							variant="h6"
 							component="div"
@@ -58,7 +60,7 @@ const Navbar = () => {
 						{user ? (
 							<>
 								<Link
-									to={`${URLRoutes.USERS}/${user?.username}`}
+									to={`/${URLRoutes.USERS}/${user?.username}`}
 								>
 									<Typography
 										variant="body1"
@@ -74,7 +76,7 @@ const Navbar = () => {
 							</>
 						) : (
 							<>
-								<Link to={`${URLRoutes.SIGNUP}`}>
+								<Link to={`/${URLRoutes.SIGNUP}`}>
 									<Typography
 										variant="body1"
 										component="div"
@@ -83,7 +85,7 @@ const Navbar = () => {
 										Sign Up
 									</Typography>
 								</Link>
-								<Link to={`${URLRoutes.LOGIN}`}>
+								<Link to={`/${URLRoutes.LOGIN}`}>
 									<Typography
 										variant="body1"
 										component="div"
