@@ -14,6 +14,9 @@ class CustomUser(AbstractUser):
     def __str__(self):
         return f"{self.pk}: {self.username}"
 
+    # class Meta:
+    #     ordering = ["-date_joined"]
+
 
 def file_upload_location(instance, filename):
     return f"images/{instance.user.username}/profile/" + filename
@@ -25,9 +28,10 @@ class UserProfile(models.Model):
         CustomUser, on_delete=models.CASCADE, related_name="profile"
     )
     image = models.ImageField(upload_to=file_upload_location, null=True, blank=True)
+    bio = models.CharField(max_length=256, default="Hello, I am new here!")
 
     def __str__(self):
-        return f"{self.pk}: {self.user.username}"
+        return f"{self.pk}: {self.user.username} profile"
 
 
 @receiver(post_save, sender=CustomUser)

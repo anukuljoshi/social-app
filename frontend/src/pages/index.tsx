@@ -22,7 +22,7 @@ type View = "all" | "following";
 
 const HomePage = () => {
 	const dispatch = useDispatch();
-	const { error, loading, posts } = useSelector(
+	const { error, posts } = useSelector(
 		(state: IStoreState) => state.posts.list
 	);
 	const [view, setView] = useState<View>("following");
@@ -38,7 +38,7 @@ const HomePage = () => {
 	return (
 		<Container>
 			<Grid container spacing={5}>
-				<Grid item xs={0} md={4} lg={3}></Grid>
+				<Grid item xs={0} md={2} lg={3}></Grid>
 				<Grid item xs={12} md={8} lg={6}>
 					<PostCreateForm />
 					<ButtonGroup sx={{ mb: 2 }}>
@@ -57,13 +57,10 @@ const HomePage = () => {
 							ALL
 						</Button>
 					</ButtonGroup>
-					{loading && (
-						<Typography variant={"h5"}>Loading...</Typography>
-					)}
 					{error && <Typography variant={"h5"}>Error</Typography>}
-					{!loading && !error && <PostList posts={posts} />}
+					{!error && <PostList posts={posts} />}
 				</Grid>
-				<Grid item xs={0} md={0} lg={3}></Grid>
+				<Grid item xs={0} md={2} lg={3}></Grid>
 			</Grid>
 		</Container>
 	);

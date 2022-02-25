@@ -6,7 +6,6 @@ import axiosInstance from "../../services/api";
 
 export const getAllPostListAction = () => {
 	return (dispatch: Dispatch) => {
-		dispatch({ type: ActionTypes.POST_LIST_LOADING });
 		axiosInstance
 			.get("/posts/all")
 			.then((res) => {
@@ -26,7 +25,6 @@ export const getAllPostListAction = () => {
 
 export const getFollowingUserPostListAction = () => {
 	return (dispatch: Dispatch) => {
-		dispatch({ type: ActionTypes.POST_LIST_LOADING });
 		axiosInstance
 			.get("/posts/following/")
 			.then((res) => {

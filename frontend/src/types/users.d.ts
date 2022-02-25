@@ -21,6 +21,7 @@ interface IUser {
 	email: string;
 	profile: {
 		image: string;
+		bio: string;
 	};
 	followers: IFollowUser[];
 	following: IFollowUser[];

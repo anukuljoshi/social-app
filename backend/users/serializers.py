@@ -11,7 +11,7 @@ User = get_user_model()
 class UserProfileSerializer(serializers.ModelSerializer):
     class Meta:
         model = UserProfile
-        fields = ["image"]
+        fields = ["image", "bio"]
 
 
 class UserCreateSerializer(serializers.ModelSerializer):

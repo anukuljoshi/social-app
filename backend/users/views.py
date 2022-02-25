@@ -9,8 +9,8 @@ from rest_framework_simplejwt.tokens import RefreshToken
 from rest_framework_simplejwt.serializers import TokenObtainPairSerializer
 from rest_framework_simplejwt.views import TokenObtainPairView
 
-from .models import UserFollowing
-from .serializers import UserFollowingSerializer
+from .models import UserFollowing, UserProfile
+from .serializers import UserFollowingSerializer, UserProfileSerializer
 
 from posts.models import Post
 from posts.serializers import PostSerializer
@@ -36,11 +36,6 @@ class MyTokenObtainPairView(TokenObtainPairView):
     serializer_class = MyTokenObtainPairSerializer
 
 
-# {
-#     "username": "test",
-#     "password": "123456",
-#     "email": "test@test.com"
-# }
 @api_view(["POST"])
 def sign_up(request, *args, **kwargs):
     username = request.data.get("username", "")
@@ -78,42 +73,31 @@ def sign_up(request, *args, **kwargs):
     return Response(serialized_data.errors, status=status.HTTP_400_BAD_REQUEST)
 
 
-# # {
-# #     "username": "test",
-# #     "password": "123456"
-# # }
-# @api_view(["POST"])
-# def log_in(request, *args, **kwargs):
-#     username = request.data.get("username", "")
-#     password = request.data.get("password", "")
-#     # files = request.FILES
+@api_view(["PATCH"])
+@permission_classes([IsAuthenticated])
+def update_user_profile(request, *args, **kwargs):
+    username = kwargs["username"]
+    user = User.objects.filter(username=username).first()
 
-#     username_user_exists = User.objects.filter(username=username)
+    if not user:
+        return Response(
+            {"message": "not found"},
+            status=status.HTTP_404_NOT_FOUND,
+        )
 
-#     if not username_user_exists:
-#         return Response(
-#             {"errors": {"username": "Username or Password is incorrect"}},
-#             status=status.HTTP_400_BAD_REQUEST,
-#         )
+    if user.pk != request.user.pk:
+        return Response({"message": "forbidden"}, status=status.HTTP_403_FORBIDDEN)
 
-#     user = authenticate(username=username, password=password)
-#     if not user:
-#         return Response(
-#             {"errors": {"username": "Username or Password is incorrect"}},
-#             status=status.HTTP_400_BAD_REQUEST,
-#         )
+    update_user_profile = UserProfile.objects.filter(user=user).first()
+    profile_serializer = UserProfileSerializer(
+        instance=update_user_profile, data=request.data
+    )
+    if profile_serializer.is_valid():
+        profile_serializer.save()
+        serialized_data = UserSerializer(user)
+        return Response(serialized_data.data, status=status.HTTP_200_OK)
 
-#     serialized_data = UserSerializer(user)
-#     refresh = RefreshToken.for_user(user)
-
-#     user_response = {}
-#     user_response["id"] = serialized_data.data["id"]
-#     user_response["username"] = serialized_data.data["username"]
-#     user_response["email"] = serialized_data.data["email"]
-#     user_response["refresh"] = str(refresh)
-#     user_response["access"] = str(refresh.access_token)
-
-#     return Response(user_response, status=status.HTTP_200_OK)
+    return Response(update_user_profile.errors, status=status.HTTP_400_BAD_REQUEST)
 
 
 @api_view(["PATCH"])
@@ -123,10 +107,17 @@ def follow_user(request, *args, **kwargs):
     followingId = kwargs["followingId"]
 
     following_user = User.objects.filter(id=followingId).first()
+
     if not following_user:
         return Response(
             {"message": "not found"},
             status=status.HTTP_404_NOT_FOUND,
+        )
+
+    if user.pk == following_user.pk:
+        return Response(
+            {"message": "bad request"},
+            status=status.HTTP_400_BAD_REQUEST,
         )
 
     follow = UserFollowing.objects.filter(
@@ -141,8 +132,9 @@ def follow_user(request, *args, **kwargs):
         new_follow.save()
 
     following_serializer = UserSerializer(following_user)
+    follower_serializer = UserSerializer(user)
     return Response(
-        following_serializer.data,
+        {"follower": follower_serializer.data, "following": following_serializer.data},
         status=status.HTTP_200_OK,
     )
 
@@ -152,6 +144,13 @@ def follow_user(request, *args, **kwargs):
 def get_user_detail(request, *args, **kwargs):
     username = kwargs["username"]
     user = User.objects.filter(username=username).first()
+
+    if not user:
+        return Response(
+            {"message": "not found"},
+            status=status.HTTP_404_NOT_FOUND,
+        )
+
     serialized_data = UserSerializer(user)
 
     return Response(serialized_data.data, status=status.HTTP_200_OK)
@@ -162,6 +161,13 @@ def get_user_detail(request, *args, **kwargs):
 def get_user_created_posts(request, *args, **kwargs):
     username = kwargs["username"]
     user = User.objects.filter(username=username).first()
+
+    if not user:
+        return Response(
+            {"message": "not found"},
+            status=status.HTTP_404_NOT_FOUND,
+        )
+
     posts = Post.objects.filter(user=user)
     serialized_data = PostSerializer(posts, many=True)
 
@@ -173,10 +179,57 @@ def get_user_created_posts(request, *args, **kwargs):
 def get_user_liked_posts(request, *args, **kwargs):
     username = kwargs["username"]
     user = User.objects.filter(username=username).first()
-    print(user)
+
+    if not user:
+        return Response(
+            {"message": "not found"},
+            status=status.HTTP_404_NOT_FOUND,
+        )
+
     posts = user.upvoted_posts.all()
-    print(posts)
     serialized_data = PostSerializer(posts, many=True)
+
+    return Response(serialized_data.data, status=status.HTTP_200_OK)
+
+
+@api_view(["GET"])
+@permission_classes([IsAuthenticated])
+def get_user_followers(request, *args, **kwargs):
+    username = kwargs["username"]
+    user = User.objects.filter(username=username).first()
+
+    if not user:
+        return Response(
+            {"message": "not found"},
+            status=status.HTTP_404_NOT_FOUND,
+        )
+
+    followers = UserFollowing.objects.filter(following=user).values_list(
+        "follower", flat=True
+    )
+    follower_users = User.objects.filter(pk__in=followers)
+    serialized_data = UserSerializer(follower_users, many=True)
+
+    return Response(serialized_data.data, status=status.HTTP_200_OK)
+
+
+@api_view(["GET"])
+@permission_classes([IsAuthenticated])
+def get_user_following(request, *args, **kwargs):
+    username = kwargs["username"]
+    user = User.objects.filter(username=username).first()
+
+    if not user:
+        return Response(
+            {"message": "not found"},
+            status=status.HTTP_404_NOT_FOUND,
+        )
+
+    following = UserFollowing.objects.filter(follower=user).values_list(
+        "following", flat=True
+    )
+    following_users = User.objects.filter(pk__in=following)
+    serialized_data = UserSerializer(following_users, many=True)
 
     return Response(serialized_data.data, status=status.HTTP_200_OK)
 

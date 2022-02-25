@@ -45,7 +45,7 @@ const SignupForm = () => {
 				.then((res) => {
 					setSubmitting(true);
 					if (res.status === 201) {
-						navigate(`${URLRoutes.LOGIN}`);
+						navigate(`/${URLRoutes.LOGIN}`);
 					}
 				})
 				.catch((error) => {

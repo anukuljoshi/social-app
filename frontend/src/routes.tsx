@@ -7,8 +7,8 @@ import HomePage from "./pages";
 import LogIn from "./pages/auth/login";
 import SignUp from "./pages/auth/signup";
 import PostIndex from "./pages/posts";
-// import UserIndex from "./pages/users";
 import UserDetail from "./pages/users/detail";
+import UserUpdate from "./pages/users/update";
 
 import { URLRoutes } from "./constants/routes";
 
@@ -16,7 +16,7 @@ const MainRoutes = () => {
 	return (
 		<Routes>
 			{/* home */}
-			<Route path={"/"} element={<PrivateRoute />}>
+			<Route path={""} element={<PrivateRoute />}>
 				<Route path={""} element={<HomePage />} />
 			</Route>
 
@@ -35,8 +35,8 @@ const MainRoutes = () => {
 
 			{/* users */}
 			<Route path={`${URLRoutes.USERS}`} element={<PrivateRoute />}>
-				{/* <Route path={""} element={<UserIndex />} /> */}
-				<Route path={":username/*"} element={<UserDetail />} />
+				<Route path={":username"} element={<UserDetail />} />
+				<Route path={":username/update"} element={<UserUpdate />} />
 			</Route>
 		</Routes>
 	);

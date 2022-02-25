@@ -51,6 +51,12 @@ def upvote_post(request, *args, **kwargs):
     postId = kwargs["postId"]
 
     post = Post.objects.filter(id=postId).first()
+    if not post:
+        return Response(
+            {"message": "not found"},
+            status=status.HTTP_404_NOT_FOUND,
+        )
+
     upvote = Upvote.objects.filter(user=user, post=post).first()
 
     if upvote:

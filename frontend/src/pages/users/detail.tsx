@@ -14,25 +14,33 @@ import UserDetailCard from "../../components/users/detail/DetailCard";
 import PostList from "../../components/posts/List";
 
 import { IStoreState } from "../../redux/store";
-import { getUserDetailAction } from "../../redux/actions/users";
+import {
+	getUserDetailAction,
+	getUserFollowersAction,
+	getUserFollowingAction,
+} from "../../redux/actions/users";
 import {
 	getUserCreatedPostsAction,
 	getUserLikedPostsAction,
 } from "../../redux/actions/posts";
+import UserList from "../../components/users/list/List";
+
+type UserDetailView = "CREATED" | "LIKED" | "FOLLOWERS" | "FOLLOWING";
 
 const UserDetail = () => {
 	const dispatch = useDispatch();
 	const params: any = useParams();
-	const {
-		error: postError,
-		loading: postLoading,
-		posts,
-	} = useSelector((state: IStoreState) => state.posts.list);
-	const { error, loading, user } = useSelector(
+	const { error: postError, posts } = useSelector(
+		(state: IStoreState) => state.posts.list
+	);
+	const { error: userError, users } = useSelector(
+		(state: IStoreState) => state.users.list
+	);
+	const { error, user } = useSelector(
 		(state: IStoreState) => state.users.detail
 	);
 
-	const [view, setView] = useState<string>("CREATED");
+	const [view, setView] = useState<UserDetailView>("CREATED");
 
 	useEffect(() => {
 		dispatch(getUserDetailAction(params.username));
@@ -44,17 +52,13 @@ const UserDetail = () => {
 				dispatch(getUserCreatedPostsAction(user?.username!));
 			} else if (view === "LIKED") {
 				dispatch(getUserLikedPostsAction(user?.username!));
+			} else if (view === "FOLLOWERS") {
+				dispatch(getUserFollowersAction(user?.username!));
+			} else if (view === "FOLLOWING") {
+				dispatch(getUserFollowingAction(user?.username!));
 			}
 		}
 	}, [dispatch, user, view]);
-
-	if (loading) {
-		return (
-			<Container>
-				<Typography variant={"h2"}>Loading...</Typography>
-			</Container>
-		);
-	}
 
 	if (error || !user) {
 		return (
@@ -67,7 +71,7 @@ const UserDetail = () => {
 	return (
 		<Container>
 			<Grid container spacing={5}>
-				<Grid item xs={0} md={4} lg={3}>
+				<Grid item xs={12} md={4} lg={3}>
 					<UserDetailCard user={user} />
 				</Grid>
 				<Grid item xs={12} md={8} lg={6}>
@@ -88,12 +92,33 @@ const UserDetail = () => {
 						>
 							LIKED
 						</Button>
+						<Button
+							variant={
+								view === "FOLLOWERS" ? "contained" : "outlined"
+							}
+							onClick={() => setView("FOLLOWERS")}
+						>
+							FOLLOWERS
+						</Button>
+						<Button
+							variant={
+								view === "FOLLOWING" ? "contained" : "outlined"
+							}
+							onClick={() => setView("FOLLOWING")}
+						>
+							FOLLOWING
+						</Button>
 					</ButtonGroup>
-					{postLoading && (
-						<Typography variant={"h5"}>Loading...</Typography>
+					{(postError || userError) && (
+						<Typography variant={"h5"}>Error</Typography>
 					)}
-					{postError && <Typography variant={"h5"}>Error</Typography>}
-					{!postLoading && !postError && <PostList posts={posts} />}
+					{!postError && (view === "CREATED" || view === "LIKED") && (
+						<PostList posts={posts} />
+					)}
+					{!userError &&
+						(view === "FOLLOWERS" || view === "FOLLOWING") && (
+							<UserList users={users} />
+						)}
 				</Grid>
 				<Grid item xs={0} md={0} lg={3}></Grid>
 			</Grid>
