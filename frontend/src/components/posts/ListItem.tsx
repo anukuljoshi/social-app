@@ -44,7 +44,7 @@ const PostListItem = ({ post }: PostListItemProps) => {
 					component={"img"}
 					image={`${BASE_API_URL}${post.image}`}
 					alt={`${post.content.substring(0, 20)}...`}
-					height={200}
+					height={"100%"}
 				/>
 			)}
 			<Box sx={{ px: 2, py: 1 }}>

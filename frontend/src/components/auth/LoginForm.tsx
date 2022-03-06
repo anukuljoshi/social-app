@@ -5,7 +5,14 @@ import { useDispatch } from "react-redux";
 import { useNavigate } from "react-router-dom";
 import { useFormik } from "formik";
 
-import { Box, Button, FormControl, TextField, Typography } from "@mui/material";
+import {
+	Box,
+	Button,
+	FormControl,
+	Stack,
+	TextField,
+	Typography,
+} from "@mui/material";
 
 import { loginUserAction } from "../../redux/actions/auth";
 
@@ -50,6 +57,27 @@ const LoginForm = () => {
 				});
 		},
 	});
+
+	const handleTestUserLogin = () => {
+		axios
+			.get(`${BASE_API_URL}/api/users/login/guest/`, {
+				headers: {
+					"Content-Type": "application/json",
+				},
+			})
+			.then((res) => {
+				if (res.status === 200) {
+					dispatch(loginUserAction(res.data));
+					navigate("/");
+				}
+			})
+			.catch((error) => {
+				console.log("log in error", error);
+				if (error.response.status === 400) {
+					setErrors(error.response.data);
+				}
+			});
+	};
 
 	return (
 		<Box sx={{ px: 3, py: 2 }}>
@@ -111,15 +139,20 @@ const LoginForm = () => {
 						}
 					/>
 				</FormControl>
-				<Box textAlign={"center"}>
-					<Button
-						type={"submit"}
-						variant={"contained"}
-						sx={{ mb: 1 }}
-					>
+				<Stack
+					direction={"row"}
+					justifyContent={"center"}
+					alignItems={"center"}
+					spacing={2}
+					sx={{ mb: 1 }}
+				>
+					<Button type={"submit"} variant={"contained"}>
 						Log In
 					</Button>
-				</Box>
+					<Button variant={"contained"} onClick={handleTestUserLogin}>
+						Log In as Guest
+					</Button>
+				</Stack>
 			</form>
 		</Box>
 	);

@@ -1,6 +1,9 @@
 from django.contrib import admin
 from django.contrib.auth.admin import UserAdmin
 
+from rest_framework_simplejwt.token_blacklist.admin import OutstandingTokenAdmin
+from rest_framework_simplejwt.token_blacklist import models
+
 from .forms import CustomUserCreationForm, CustomUserChangeForm
 
 from .models import CustomUser, UserProfile, UserFollowing
@@ -29,6 +32,15 @@ class CustomUserAdmin(UserAdmin):
         ),
     )
     search_fields = ("username",)
+
+
+class NewOutstandingTokenAdmin(OutstandingTokenAdmin):
+    def has_delete_permission(self, *args, **kwargs):
+        return True
+
+
+# admin.site.unregister(models.OutstandingToken)
+admin.site.register(models.OutstandingToken, NewOutstandingTokenAdmin)
 
 
 admin.site.register(CustomUser, CustomUserAdmin)

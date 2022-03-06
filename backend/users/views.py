@@ -73,6 +73,16 @@ def sign_up(request, *args, **kwargs):
     return Response(serialized_data.errors, status=status.HTTP_400_BAD_REQUEST)
 
 
+@api_view(["GET"])
+def login_as_guest_user(request, *args, **kwargs):
+    user = User.objects.filter(username="guest").first()
+    refresh = MyTokenObtainPairSerializer.get_token(user)
+    return Response(
+        {"refresh": str(refresh), "access": str(refresh.access_token)},
+        status=status.HTTP_200_OK,
+    )
+
+
 @api_view(["PATCH"])
 @permission_classes([IsAuthenticated])
 def update_user_profile(request, *args, **kwargs):
