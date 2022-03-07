@@ -39,7 +39,7 @@ class NewOutstandingTokenAdmin(OutstandingTokenAdmin):
         return True
 
 
-# admin.site.unregister(models.OutstandingToken)
+admin.site.unregister(models.OutstandingToken)
 admin.site.register(models.OutstandingToken, NewOutstandingTokenAdmin)
 
 
