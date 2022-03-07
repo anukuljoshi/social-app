@@ -1,11 +1,13 @@
 import { ActionTypes } from "../actions/types";
 
 interface IPostList {
+	loading: boolean;
 	error: boolean;
 	posts: IPost[];
 }
 
 const postList: IPostList = {
+	loading: false,
 	error: false,
 	posts: [],
 };
@@ -13,14 +15,24 @@ const postList: IPostList = {
 export const postListReducer = (state = postList, action: any): IPostList => {
 	let tempPosts, index;
 	switch (action.type) {
+		case ActionTypes.POST_LIST_LOADING:
+			return {
+				...state,
+				loading: true,
+				error: false,
+				posts: [],
+			};
 		case ActionTypes.POST_LIST_ERROR:
 			return {
 				...state,
+				loading: false,
 				error: true,
+				posts: [],
 			};
 		case ActionTypes.POST_LIST_SUCCESS:
 			return {
 				...state,
+				loading: false,
 				error: false,
 				posts: action.payload,
 			};
@@ -29,6 +41,7 @@ export const postListReducer = (state = postList, action: any): IPostList => {
 			tempPosts.unshift(action.payload);
 			return {
 				...state,
+				loading: false,
 				error: false,
 				posts: tempPosts,
 			};
@@ -40,6 +53,7 @@ export const postListReducer = (state = postList, action: any): IPostList => {
 			tempPosts[index] = action.payload;
 			return {
 				...state,
+				loading: false,
 				error: false,
 				posts: tempPosts,
 			};

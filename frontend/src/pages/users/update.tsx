@@ -39,7 +39,7 @@ const UserUpdate = () => {
 	return (
 		<Container>
 			<Grid container spacing={5}>
-				<Grid item xs={12} md={4} lg={3}>
+				<Grid item xs={12} md={4} lg={4}>
 					<UserDetailCard user={user} />
 				</Grid>
 				<Grid item xs={12} md={8} lg={6}>

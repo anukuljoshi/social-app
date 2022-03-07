@@ -19,21 +19,13 @@ INSTALLED_APPS = [
     "rest_framework",
     "rest_framework_simplejwt",
     "rest_framework_simplejwt.token_blacklist",
+    "storages",
     # created
     "posts.apps.PostsConfig",
     "users.apps.UsersConfig",
+    "frontend.apps.FrontendConfig",
 ]
 
-MIDDLEWARE = [
-    "django.middleware.security.SecurityMiddleware",
-    "django.contrib.sessions.middleware.SessionMiddleware",
-    "corsheaders.middleware.CorsMiddleware",
-    "django.middleware.common.CommonMiddleware",
-    "django.middleware.csrf.CsrfViewMiddleware",
-    "django.contrib.auth.middleware.AuthenticationMiddleware",
-    "django.contrib.messages.middleware.MessageMiddleware",
-    "django.middleware.clickjacking.XFrameOptionsMiddleware",
-]
 
 ROOT_URLCONF = "social_app.urls"
 
@@ -87,33 +79,10 @@ USE_L10N = True
 
 USE_TZ = True
 
-
-# Static files (CSS, JavaScript, Images)
-# https://docs.djangoproject.com/en/3.2/howto/static-files/
-
-STATIC_URL = "/static/"
-STATIC_ROOT = os.path.join(BASE_DIR, "static")
-STATIC_FILE_DIRS = os.path.join(BASE_DIR, "staticfiles")
-
-MEDIA_URL = "/media/"
-MEDIA_ROOT = os.path.join(BASE_DIR, "media")
-
 # Default primary key field type
 # https://docs.djangoproject.com/en/3.2/ref/settings/#default-auto-field
 
 DEFAULT_AUTO_FIELD = "django.db.models.BigAutoField"
-
-REST_FRAMEWORK = {
-    "DEFAULT_AUTHENTICATION_CLASS": {
-        "rest_framework_simplejwt.authentication.JWTAuthentication",
-    }
-}
-
-# cors
-CORS_ALLOWED_ORIGINS = [
-    "http://localhost:3000",
-    "http://127.0.0.1:3000",
-]
 
 # rest framework
 REST_FRAMEWORK = {

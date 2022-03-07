@@ -61,7 +61,6 @@ const UserUpdateForm = ({ user }: UserUpdateFormProps) => {
 		}),
 		onSubmit: (values, { setSubmitting }) => {
 			setSubmitting(false);
-			console.log(values);
 			const formData = new FormData();
 			formData.append("bio", values.bio);
 			if (values.image) {

@@ -33,10 +33,9 @@ const LoginForm = () => {
 			password: Yup.string().required("Required"),
 		}),
 		onSubmit: (values, { setSubmitting }) => {
-			// console.log(values);
 			setSubmitting(false);
 			axios
-				.post(`${BASE_API_URL}/api/users/token/`, values, {
+				.post(`${BASE_API_URL}/api/users/login/`, values, {
 					headers: {
 						"Content-Type": "application/json",
 					},
@@ -51,7 +50,9 @@ const LoginForm = () => {
 				.catch((error) => {
 					setSubmitting(true);
 					console.log("log in error", error);
-					if (error.response.status === 400) {
+					if (
+						error.response.status === 400
+					) {
 						setErrors(error.response.data);
 					}
 				});

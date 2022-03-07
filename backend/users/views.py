@@ -73,9 +73,48 @@ def sign_up(request, *args, **kwargs):
     return Response(serialized_data.errors, status=status.HTTP_400_BAD_REQUEST)
 
 
+@api_view(["POST"])
+def login(request, *args, **kwargs):
+    username = request.data.get("username", "")
+    password = request.data.get("password", "")
+
+    user = User.objects.filter(username=username).first()
+
+    if not user:
+        return Response(
+            {
+                "errors": {
+                    "username": "Username or password incorrect",
+                    "password": "Username or password incorrect",
+                }
+            },
+            status=status.HTTP_400_BAD_REQUEST,
+        )
+
+    is_user_valid = user.check_password(password)
+    if not is_user_valid:
+        return Response(
+            {
+                "errors": {
+                    "username": "Username or password incorrect",
+                    "password": "Username or password incorrect",
+                }
+            },
+            status=status.HTTP_400_BAD_REQUEST,
+        )
+
+    refresh = MyTokenObtainPairSerializer.get_token(user)
+
+    return Response(
+        {"refresh": str(refresh), "access": str(refresh.access_token)},
+        status=status.HTTP_200_OK,
+    )
+
+
 @api_view(["GET"])
 def login_as_guest_user(request, *args, **kwargs):
     user = User.objects.filter(username="guest").first()
+    print(user)
     refresh = MyTokenObtainPairSerializer.get_token(user)
     return Response(
         {"refresh": str(refresh), "access": str(refresh.access_token)},

@@ -66,7 +66,6 @@ const PostCreateForm = () => {
 				})
 				.then((res) => {
 					setSubmitting(true);
-					console.log(res.data);
 					if (res.status === 201) {
 						dispatch(createPostAction(res.data));
 					}

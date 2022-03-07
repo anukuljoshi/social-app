@@ -1,11 +1,13 @@
 import { ActionTypes } from "../actions/types";
 
 interface IUserList {
+	loading: boolean;
 	error: boolean;
 	users: IUser[];
 }
 
 const userList: IUserList = {
+	loading: false,
 	error: false,
 	users: [],
 };
@@ -13,14 +15,24 @@ const userList: IUserList = {
 export const userListReducer = (state = userList, action: any): IUserList => {
 	let tempUsers, index;
 	switch (action.type) {
+		case ActionTypes.USER_LIST_LOADING:
+			return {
+				...state,
+				loading: true,
+				error: false,
+				users: [],
+			};
 		case ActionTypes.USER_LIST_ERROR:
 			return {
 				...state,
+				loading: false,
 				error: true,
+				users: [],
 			};
 		case ActionTypes.USER_LIST_SUCCESS:
 			return {
 				...state,
+				loading: false,
 				error: false,
 				users: action.payload,
 			};
@@ -32,6 +44,7 @@ export const userListReducer = (state = userList, action: any): IUserList => {
 			tempUsers[index] = action.payload.following;
 			return {
 				...state,
+				loading: false,
 				error: false,
 				users: tempUsers,
 			};
@@ -41,11 +54,13 @@ export const userListReducer = (state = userList, action: any): IUserList => {
 };
 
 interface IUserDetail {
+	loading: boolean;
 	error: boolean;
 	user: IUser | null;
 }
 
 const userDetail: IUserDetail = {
+	loading: false,
 	error: false,
 	user: null,
 };
@@ -56,14 +71,24 @@ export const userDetailReducer = (
 ): IUserDetail => {
 	let tempUser;
 	switch (action.type) {
+		case ActionTypes.USER_DETAIL_LOADING:
+			return {
+				...state,
+				loading: true,
+				error: false,
+				user: null,
+			};
 		case ActionTypes.USER_DETAIL_ERROR:
 			return {
 				...state,
+				loading: false,
 				error: true,
+				user: null,
 			};
 		case ActionTypes.USER_DETAIL_SUCCESS:
 			return {
 				...state,
+				loading: false,
 				error: false,
 				user: action.payload,
 			};
@@ -76,6 +101,7 @@ export const userDetailReducer = (
 			}
 			return {
 				...state,
+				loading: false,
 				error: false,
 				user: tempUser,
 			};

@@ -34,7 +34,6 @@ const SignupForm = () => {
 			),
 		}),
 		onSubmit: async (values, { setSubmitting }) => {
-			// console.log(values);
 			setSubmitting(false);
 			axios
 				.post(`${BASE_API_URL}/api/users/signup/`, values, {

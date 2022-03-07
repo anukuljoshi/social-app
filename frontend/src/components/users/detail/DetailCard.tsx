@@ -31,7 +31,7 @@ const UserDetailCard = ({ user }: UserDetailCardProps) => {
 			component={Paper}
 			justifyContent={"center"}
 			spacing={1}
-			sx={{ px: 2, py: 2 }}
+			sx={{ px: 2, py: 2, maxWidth: 320 }}
 		>
 			<Avatar
 				alt={`${user.username}`}

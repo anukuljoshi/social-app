@@ -6,6 +6,7 @@ import { ActionTypes } from "./types";
 
 export const getUserFollowersAction = (username: string) => {
 	return (dispatch: Dispatch) => {
+		dispatch({ type: ActionTypes.USER_LIST_LOADING });
 		axiosInstance
 			.get(`/users/${username}/followers/`)
 			.then((res) => {
@@ -25,6 +26,7 @@ export const getUserFollowersAction = (username: string) => {
 
 export const getUserFollowingAction = (username: string) => {
 	return (dispatch: Dispatch) => {
+		dispatch({ type: ActionTypes.USER_LIST_LOADING });
 		axiosInstance
 			.get(`/users/${username}/following/`)
 			.then((res) => {

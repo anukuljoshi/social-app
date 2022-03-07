@@ -6,6 +6,7 @@ import axiosInstance from "../../services/api";
 
 export const getAllPostListAction = () => {
 	return (dispatch: Dispatch) => {
+		dispatch({ type: ActionTypes.POST_LIST_LOADING });
 		axiosInstance
 			.get("/posts/all")
 			.then((res) => {
@@ -25,6 +26,7 @@ export const getAllPostListAction = () => {
 
 export const getFollowingUserPostListAction = () => {
 	return (dispatch: Dispatch) => {
+		dispatch({ type: ActionTypes.POST_LIST_LOADING });
 		axiosInstance
 			.get("/posts/following/")
 			.then((res) => {
@@ -72,6 +74,7 @@ export const upvotePostAction = (postId: string | number) => {
 
 export const getUserCreatedPostsAction = (username: string) => {
 	return (dispatch: Dispatch) => {
+		dispatch({ type: ActionTypes.POST_LIST_LOADING });
 		axiosInstance
 			.get(`/users/${username}/posts/`)
 			.then((res) => {
@@ -91,6 +94,7 @@ export const getUserCreatedPostsAction = (username: string) => {
 
 export const getUserLikedPostsAction = (username: string) => {
 	return (dispatch: Dispatch) => {
+		dispatch({ type: ActionTypes.POST_LIST_LOADING });
 		axiosInstance
 			.get(`/users/${username}/posts/liked/`)
 			.then((res) => {
