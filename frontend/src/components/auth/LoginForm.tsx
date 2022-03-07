@@ -50,9 +50,7 @@ const LoginForm = () => {
 				.catch((error) => {
 					setSubmitting(true);
 					console.log("log in error", error);
-					if (
-						error.response.status === 400
-					) {
+					if (error.response.status === 400) {
 						setErrors(error.response.data);
 					}
 				});
@@ -74,7 +72,7 @@ const LoginForm = () => {
 			})
 			.catch((error) => {
 				console.log("log in error", error);
-				if (error.response.status === 400) {
+				if (error.response && error.response.status === 400) {
 					setErrors(error.response.data);
 				}
 			});

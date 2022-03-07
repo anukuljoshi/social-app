@@ -18,7 +18,7 @@ export const getAllPostListAction = () => {
 				}
 			})
 			.catch((error) => {
-				console.log("get all post list action error", error.response);
+				console.log("get all post list action error", error);
 				dispatch({ type: ActionTypes.POST_LIST_ERROR });
 			});
 	};
@@ -38,10 +38,7 @@ export const getFollowingUserPostListAction = () => {
 				}
 			})
 			.catch((error) => {
-				console.log(
-					"get following user post list action error",
-					error.response
-				);
+				console.log("get following user post list action error", error);
 				dispatch({ type: ActionTypes.POST_LIST_ERROR });
 			});
 	};
@@ -66,7 +63,7 @@ export const upvotePostAction = (postId: string | number) => {
 				}
 			})
 			.catch((error) => {
-				console.log("upvote post action error", error.response);
+				console.log("upvote post action error", error);
 				dispatch({ type: ActionTypes.POST_LIST_ERROR });
 			});
 	};
@@ -86,7 +83,7 @@ export const getUserCreatedPostsAction = (username: string) => {
 				}
 			})
 			.catch((error) => {
-				console.log("getUserCreatedPostsAction", error.response);
+				console.log("getUserCreatedPostsAction", error);
 				dispatch({ type: ActionTypes.POST_LIST_ERROR });
 			});
 	};
@@ -106,7 +103,7 @@ export const getUserLikedPostsAction = (username: string) => {
 				}
 			})
 			.catch((error) => {
-				console.log("getUserLikedPostsAction", error.response);
+				console.log("getUserLikedPostsAction", error);
 				dispatch({ type: ActionTypes.POST_LIST_ERROR });
 			});
 	};

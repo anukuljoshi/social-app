@@ -57,7 +57,7 @@ export const getUserDetailAction = (username: string) => {
 				}
 			})
 			.catch((error) => {
-				console.log("getUserDetailAction error", error.response);
+				console.log("getUserDetailAction error", error);
 				dispatch({ type: ActionTypes.USER_DETAIL_ERROR });
 			});
 	};
