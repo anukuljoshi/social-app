@@ -91,7 +91,7 @@ const HomePage = () => {
 									ALL
 								</Button>
 							</ButtonGroup>
-							{!error && <PostList posts={posts} />}
+							<PostList posts={posts} />
 						</>
 					}
 				</Grid>

@@ -8,7 +8,7 @@ export const getAllPostListAction = () => {
 	return (dispatch: Dispatch) => {
 		dispatch({ type: ActionTypes.POST_LIST_LOADING });
 		axiosInstance
-			.get("/posts/all")
+			.get("/posts/all/")
 			.then((res) => {
 				if (res.status === 200) {
 					dispatch({
