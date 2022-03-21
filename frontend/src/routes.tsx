@@ -8,9 +8,9 @@ import LogIn from "./pages/auth/login";
 import SignUp from "./pages/auth/signup";
 import UserDetail from "./pages/users/detail";
 import UserUpdate from "./pages/users/update";
+import NotFoundPage from "./pages/errors/not-found";
 
 import { URLRoutes } from "./constants/routes";
-import NotFoundPage from "./pages/errors/not-found";
 
 const MainRoutes = () => {
 	return (
